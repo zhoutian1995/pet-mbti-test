@@ -1,0 +1,63 @@
+# OpenClaw Workspace Bob - Git Ignore
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.output/
+.astro/
+
+# Cache
+.cache/
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary
+*.tmp
+*.temp
+*.bak
+
+# Large files (use Git LFS if needed)
+*.zip
+*.tar.gz
+willeai-astro/
+willeAI/
+
+# Symlinks (don't track external paths)
+obsidian
+vault
+skills
+
+# Screenshots and images (optional)
+screenshots/
+archive/images/
+archive/tests/
+
+# Memory (daily notes)
+memory/*.md
+
+# Planning examples
+planning-examples/
