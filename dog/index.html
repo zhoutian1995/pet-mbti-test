@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>狗狗 MBTI 测试 - Canine Protocol</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <style>
+        body { background: #050505; }
+        .progress-bar { transition: width 0.3s ease; }
+        .option-btn { transition: all 0.2s ease; }
+        .option-btn:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body class="bg-[#050505] text-neutral-300 font-sans antialiased min-h-screen">
+    <!-- Loading Animation -->
+    <div id="loading" class="fixed inset-0 bg-[#050505] z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div class="font-mono text-emerald-400 text-sm mb-4">Loading System Modules...</div>
+            <div class="w-64 h-1 bg-neutral-800 rounded">
+                <div class="h-full bg-emerald-500 rounded progress-bar" style="width: 0%" id="load-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="app" class="hidden">
+        <!-- Header -->
+        <header class="flex items-center justify-between px-6 py-4 border-b border-neutral-800">
+            <div class="flex items-center gap-2">
+                <iconify-icon icon="solar:bone-linear" width="24" class="text-emerald-400"></iconify-icon>
+                <span class="text-sm font-medium tracking-tighter text-white uppercase">Canine Protocol</span>
+            </div>
+            <div class="text-xs font-mono text-neutral-600">
+                <span id="question-counter">1/15</span>
+            </div>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="w-full h-1 bg-neutral-800">
+            <div class="h-full bg-emerald-500 progress-bar" style="width: 6.66%" id="progress"></div>
+        </div>
+
+        <!-- Question Container -->
+        <main class="max-w-2xl mx-auto px-6 py-12">
+            <div id="question-container">
+                <h2 id="question-text" class="text-2xl font-medium text-white mb-8"></h2>
+                <div id="options-container" class="space-y-3"></div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Loading animation
+        let loadProgress = 0;
+        const loadInterval = setInterval(() => {
+            loadProgress += Math.random() * 30;
+            if (loadProgress >= 100) {
+                loadProgress = 100;
+                clearInterval(loadInterval);
+                setTimeout(() => {
+                    document.getElementById('loading').classList.add('hidden');
+                    document.getElementById('app').classList.remove('hidden');
+                }, 300);
+            }
+            document.getElementById('load-progress').style.width = loadProgress + '%';
+        }, 100);
+
+        // Questions data
+        let questions = [];
+        let currentQuestion = 0;
+        let scores = { E: 0, I: 0, N: 0, S: 0, F: 0, T: 0, J: 0, P: 0 };
+
+        // Load questions
+        fetch('questions.json')
+            .then(r => r.json())
+            .then(data => {
+                questions = data;
+                showQuestion();
+            });
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('question-text').textContent = q.question;
+            document.getElementById('question-counter').textContent = `${currentQuestion + 1}/15`;
+            document.getElementById('progress').style.width = `${((currentQuestion + 1) / 15) * 100}%`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn w-full p-4 rounded-xl bg-neutral-900/50 border border-neutral-800 hover:bg-neutral-800/50 hover:border-emerald-500/50 text-left';
+                btn.innerHTML = `<span class="text-neutral-500 mr-3">${String.fromCharCode(65 + i)}.</span>${opt.text}`;
+                btn.onclick = () => selectOption(opt.score);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectOption(score) {
+            for (const [dim, val] of Object.entries(score)) {
+                scores[dim] += val;
+            }
+
+            currentQuestion++;
+            if (currentQuestion >= questions.length) {
+                const result = calculateMBTI();
+                window.location.href = `../result.html?type=${result}&species=dog`;
+            } else {
+                showQuestion();
+            }
+        }
+
+        function calculateMBTI() {
+            const e_i = scores.E >= scores.I ? 'E' : 'I';
+            const n_s = scores.N >= scores.S ? 'N' : 'S';
+            const f_t = scores.F >= scores.T ? 'F' : 'T';
+            const j_p = scores.J >= scores.P ? 'J' : 'P';
+            return e_i + n_s + f_t + j_p;
+        }
+    </script>
+</body>
+</html>
