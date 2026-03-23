@@ -166,36 +166,56 @@
 
             q.options.forEach((opt, i) => {
                 const btn = document.createElement('button');
-                // 如果是已选中的选项，添加高亮样式
+                // MODIFIED: 2026-03-23 - Phase 5 "不确定"选项使用特殊样式
                 const isSelected = i === selectedIndex;
-                btn.className = `option-btn w-full p-4 rounded-xl bg-neutral-900/50 border text-left transition-all ${
-                    isSelected
-                        ? 'bg-indigo-900/30 border-indigo-500 text-white'
-                        : 'border-neutral-800 hover:bg-neutral-800/50 hover:border-indigo-500/50'
-                }`;
-                btn.innerHTML = `<span class="text-neutral-500 mr-3">${String.fromCharCode(65 + i)}.</span>${opt.text}`;
-                // MODIFIED: 2026-03-23 - Phase 2 恢复已选答案高亮
-                if (userAnswers[currentQuestion] && userAnswers[currentQuestion].index === i) {
-                    btn.classList.add('ring-2', 'ring-indigo-500', 'bg-indigo-500/10', 'border-indigo-500/50');
+                const isUncertain = Object.keys(opt.score).length === 0;
+
+                if (isUncertain) {
+                    // "不确定"选项使用灰色虚线边框样式
+                    btn.className = `option-btn w-full p-4 rounded-xl bg-neutral-900/30 border text-left transition-all ${
+                        isSelected
+                            ? 'bg-neutral-800/50 border-neutral-500 text-neutral-300 ring-2 ring-neutral-600'
+                            : 'border-neutral-700 border-dashed hover:bg-neutral-800/30 hover:border-neutral-600 text-neutral-500'
+                    }`;
+                } else {
+                    // 正常选项
+                    btn.className = `option-btn w-full p-4 rounded-xl bg-neutral-900/50 border text-left transition-all ${
+                        isSelected
+                            ? 'bg-indigo-900/30 border-indigo-500 text-white'
+                            : 'border-neutral-800 hover:bg-neutral-800/50 hover:border-indigo-500/50'
+                    }`;
+                    // MODIFIED: 2026-03-23 - Phase 2 恢复已选答案高亮
+                    if (userAnswers[currentQuestion] && userAnswers[currentQuestion].index === i) {
+                        btn.classList.add('ring-2', 'ring-indigo-500', 'bg-indigo-500/10', 'border-indigo-500/50');
+                    }
                 }
+                btn.innerHTML = `<span class="text-neutral-500 mr-3">${String.fromCharCode(65 + i)}.</span>${opt.text}`;
                 btn.onclick = () => selectOption(opt.score, i);
                 container.appendChild(btn);
             });
         }
 
+        // MODIFIED: 2026-03-23 - Phase 5 支持"不确定"选项
         function selectOption(score, index) {
             // 如果当前题目已有答案，先减去旧分数
             const oldAnswer = userAnswers[currentQuestion];
-            if (oldAnswer) {
+            if (oldAnswer && !oldAnswer.skipped) {
                 for (const [dim, val] of Object.entries(oldAnswer.score)) {
                     scores[dim] -= val;
                 }
             }
 
-            // 存储新答案并加上新分数
-            userAnswers[currentQuestion] = { score, index };
-            for (const [dim, val] of Object.entries(score)) {
-                scores[dim] += val;
+            // 判断是否为"不确定"选项（score 为空对象）
+            const isSkipped = Object.keys(score).length === 0;
+
+            // 存储新答案
+            userAnswers[currentQuestion] = { score, index, skipped: isSkipped };
+
+            // 只有非跳过的选项才计入分数
+            if (!isSkipped) {
+                for (const [dim, val] of Object.entries(score)) {
+                    scores[dim] += val;
+                }
             }
 
             currentQuestion++;
@@ -217,7 +237,9 @@
             }
         }
 
+        // MODIFIED: 2026-03-23 - Phase 5 支持部分跳过时的计算
         function calculateMBTI() {
+            // 如果某个维度全部被跳过（分数都是0），使用默认值
             const e_i = scores.E >= scores.I ? 'E' : 'I';
             const n_s = scores.N >= scores.S ? 'N' : 'S';
             const f_t = scores.F >= scores.T ? 'F' : 'T';

@@ -14,11 +14,12 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "cdn.tailwindcss.com", "code.iconify.design"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "cdn.tailwindcss.com", "code.iconify.design", "html2canvas.hertzen.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "fonts.googleapis.com"],
       fontSrc: ["'self'", "fonts.gstatic.com"],
       imgSrc: ["'self'", "data:", "blob:"],
-      connectSrc: ["'self'"]
+      connectSrc: ["'self'", "api.iconify.design", "api.unisvg.com", "api.simplesvg.com"],
+      scriptSrcAttr: ["'self'", "'unsafe-inline'"]    // FIX: 2026-03-23 - Phase 5 支持 inline event handlers
     }
   }
 }));
