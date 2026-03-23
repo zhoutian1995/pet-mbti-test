@@ -11,6 +11,12 @@
         .progress-bar { transition: width 0.3s ease; }
         .option-btn { transition: all 0.2s ease; }
         .option-btn:hover { transform: translateY(-2px); }
+        /* MODIFIED: 2026-03-23 - Phase 2 选项高亮 */
+        .option-btn.selected {
+            ring: 2px solid #818cf8;
+            background: rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
     </style>
 </head>
 <body class="bg-[#050505] text-neutral-300 font-sans antialiased min-h-screen">
@@ -168,6 +174,10 @@
                         : 'border-neutral-800 hover:bg-neutral-800/50 hover:border-indigo-500/50'
                 }`;
                 btn.innerHTML = `<span class="text-neutral-500 mr-3">${String.fromCharCode(65 + i)}.</span>${opt.text}`;
+                // MODIFIED: 2026-03-23 - Phase 2 恢复已选答案高亮
+                if (userAnswers[currentQuestion] && userAnswers[currentQuestion].index === i) {
+                    btn.classList.add('ring-2', 'ring-indigo-500', 'bg-indigo-500/10', 'border-indigo-500/50');
+                }
                 btn.onclick = () => selectOption(opt.score, i);
                 container.appendChild(btn);
             });

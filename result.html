@@ -83,6 +83,21 @@
             document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
         }
         
+        // MODIFIED: 2026-03-23 - Phase 4 海报配置提取
+        const POSTER_CONFIG = {
+            width: 1080,
+            height: 1920,
+            scale: 2,
+            avatarSize: 380,
+            qrCodeSize: 240,
+            mbtiFontSize: 90,
+            titleFontSize: 32,
+            tagFontSize: 15,
+            quoteFontSize: 18,
+            gridSpacing: 60,
+            imageTimeout: 15000
+        };
+
         // Translation labels
         const i18nLabels = {
             'retest': {'zh': '重新测试', 'en': 'Retest'},
@@ -128,7 +143,10 @@
         let resultData = null;
         
         fetch(resultsFile)
-            .then(r => r.json())
+            .then(r => {
+                if (!r.ok) throw new Error('Network response was not ok');
+                return r.json();
+            })
             .then(data => {
                 const result = data[mbtiType];
                 if (!result) {
@@ -162,6 +180,16 @@
                     li.innerHTML = `<iconify-icon icon="solar:check-circle-linear" width="20" class="text-emerald-400 shrink-0"></iconify-icon><span style="font-size: 15px; font-weight: 500;">${tip}</span>`;
                     tipsContainer.appendChild(li);
                 });
+            })
+            // MODIFIED: 2026-03-23 - Phase 3 错误处理
+            .catch(err => {
+                console.error('Failed to load results:', err);
+                document.getElementById('result-container').innerHTML = `
+                    <div class="text-center py-12">
+                        <p class="text-neutral-500 mb-4">⚠️ ${lang === 'en' ? 'Failed to load results' : '加载结果失败'}</p>
+                        <button onclick="location.reload()" class="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-500">${lang === 'en' ? 'Retry' : '重新加载'}</button>
+                    </div>
+                `;
             });
 
         // Share button - generate poster
@@ -175,19 +203,21 @@
             const isCat = species === 'cat';
             const petEmoji = isCat ? '🐱' : '🐶';
             const glowColor = isCat ? 'rgba(139,92,246,0.3)' : 'rgba(16,185,129,0.3)';
-            const avatarSrc = `assets/${species}-${mbtiType}.png`;
+            // MODIFIED: 2026-03-23 - Phase 2 使用绝对路径修复部署兼容性
+            const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
+            const avatarSrc = `${baseUrl}/assets/${species}-${mbtiType}.png`;
             console.log('海报生成 - 头像路径:', avatarSrc);
             
             posterContainer.innerHTML = `
                 <div id="poster-to-generate" style="
-                    width: 1080px;
-                    height: 1920px;
+                    width: ${POSTER_CONFIG.width}px;
+                    height: ${POSTER_CONFIG.height}px;
                     background: linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
                     position: relative;
                     overflow: hidden;
                 ">
                     <!-- Grid Background -->
-                    <div style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 60px 60px;"></div>
+                    <div style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: ${POSTER_CONFIG.gridSpacing}px ${POSTER_CONFIG.gridSpacing}px;"></div>
                     
                     <!-- Glow Effect -->
                     <div style="position: absolute; top: -5%; left: 50%; transform: translateX(-50%); width: 700px; height: 400px; background: radial-gradient(ellipse, ${glowColor} 0%, transparent 70%); filter: blur(100px); border-radius: 50%;"></div>
@@ -201,24 +231,24 @@
                     
                     <!-- Avatar Image - 修复尺寸 -->
                     <div style="position: relative; z-index: 10; padding: 40px 40px 50px; display: flex; justify-content: center; align-items: center;">
-                        <img src="${avatarSrc}" style="width: 380px; height: 380px; border-radius: 24px; background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%); border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 20px 60px ${glowColor.replace('0.3', '0.4')}; object-fit: cover; display: block;">
+                        <img src="${avatarSrc}" style="width: ${POSTER_CONFIG.avatarSize}px; height: ${POSTER_CONFIG.avatarSize}px; border-radius: 24px; background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%); border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 20px 60px ${glowColor.replace('0.3', '0.4')}; object-fit: cover; display: block;">
                     </div>
                     
                     <!-- Result Section - P0 修复 -->
                     <div style="position: relative; z-index: 10; padding: 30px 60px 40px; text-align: center;">
-                        <div style="font-size: 90px; font-weight: 900; color: #ffffff; letter-spacing: -4px; margin: 0; text-shadow: 0 4px 40px rgba(255,255,255,0.2);">${resultData.type}</div>
-                        <div style="font-size: 32px; color: #cccccc; margin: 24px 0 40px; font-weight: 700; letter-spacing: 3px;">${resultData.title}</div>
+                        <div style="font-size: ${POSTER_CONFIG.mbtiFontSize}px; font-weight: 900; color: #ffffff; letter-spacing: -4px; margin: 0; text-shadow: 0 4px 40px rgba(255,255,255,0.2);">${resultData.type}</div>
+                        <div style="font-size: ${POSTER_CONFIG.titleFontSize}px; color: #cccccc; margin: 24px 0 40px; font-weight: 700; letter-spacing: 3px;">${resultData.title}</div>
                         
                         <!-- Tags - P0 精确修复 -->
                         <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 45px;">
-                            ${resultData.tags.map(tag => `<span style="display: inline-flex; align-items: center; justify-content: center; min-width: 150px; padding: 14px 24px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 24px; color: #ffffff; font-size: 15px; font-weight: 600; letter-spacing: 1px;">#${tag}</span>`).join('')}
+                            ${resultData.tags.map(tag => `<span style="display: inline-flex; align-items: center; justify-content: center; min-width: 150px; padding: 14px 24px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 24px; color: #ffffff; font-size: ${POSTER_CONFIG.tagFontSize}px; font-weight: 600; letter-spacing: 1px;">#${tag}</span>`).join('')}
                         </div>
                         
                         <!-- Divider -->
                         <div style="height: 2px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); margin: 40px 0;"></div>
                         
                         <!-- Quote - P1 精确修复 -->
-                        <div style="font-size: 18px; color: #aaaaaa; font-style: italic; line-height: 1.9; max-width: 650px; margin: 35px auto 0; padding: 20px 35px; position: relative; background: rgba(255,255,255,0.05); border-radius: 14px;">
+                        <div style="font-size: ${POSTER_CONFIG.quoteFontSize}px; color: #aaaaaa; font-style: italic; line-height: 1.9; max-width: 650px; margin: 35px auto 0; padding: 20px 35px; position: relative; background: rgba(255,255,255,0.05); border-radius: 14px;">
                             <span style="font-size: 48px; color: #666666; position: absolute; top: -5px; left: 15px;">"</span>
                             <span style="position: relative; z-index: 1;">${resultData.quote}</span>
                             <span style="font-size: 48px; color: #666666; position: absolute; bottom: -25px; right: 15px;">"</span>
@@ -227,7 +257,7 @@
                     
                     <!-- QR Code Section - 缩小二维码，统一文字 -->
                     <div style="position: relative; z-index: 10; padding: 60px 60px 50px; text-align: center;">
-                        <img src="assets/qrcode_final.png" style="width: 240px; height: 240px; margin: 0 auto 28px; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4);">
+                        <img src="assets/qrcode_final.png" style="width: ${POSTER_CONFIG.qrCodeSize}px; height: ${POSTER_CONFIG.qrCodeSize}px; margin: 0 auto 28px; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4);">
                         <div style="font-size: 18px; color: #888888; margin-bottom: 14px; font-weight: 500; letter-spacing: 1px;">${lang === 'en' ? 'Scan to test your pet' : '关注公众号发送"MBTI"'}</div>
                         <div style="font-size: 16px; color: #666666; letter-spacing: 2px; font-weight: 400;">willeai.cn/for-human/</div>
                     </div>
@@ -256,12 +286,12 @@
             
             // Generate image
             html2canvas(posterContainer.querySelector('#poster-to-generate'), {
-                scale: 2,
+                scale: POSTER_CONFIG.scale,
                 useCORS: true,
                 allowTaint: true,
                 backgroundColor: '#050505',
                 logging: false,
-                imageTimeout: 15000
+                imageTimeout: POSTER_CONFIG.imageTimeout
             }).then(canvas => {
                 // 隐藏加载提示，显示保存提示
                 const loadingEl = modal.querySelector('#poster-loading');
@@ -279,9 +309,14 @@
                 document.body.removeChild(posterContainer);
             }).catch(err => {
                 console.error('Poster generation failed:', err);
-                // 显示错误提示
+                // MODIFIED: 2026-03-23 - Phase 3 添加重试按钮
                 const loadingEl = modal.querySelector('#poster-loading');
-                loadingEl.innerHTML = `<span style="color: #f87171;">❌ ${lang === 'en' ? 'Failed to generate poster' : '生成海报失败'}</span>`;
+                loadingEl.innerHTML = `
+                    <span style="color: #f87171;">❌ ${lang === 'en' ? 'Failed to generate poster' : '生成海报失败'}</span>
+                    <button onclick="document.getElementById('share-btn').click(); this.closest('div[style*=fixed]').remove();" style="display: block; margin-top: 12px; padding: 10px 24px; background: rgba(99,102,241,0.8); color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 14px;">
+                        ${lang === 'en' ? '🔄 Retry' : '🔄 重试'}
+                    </button>
+                `;
                 if (posterContainer.parentNode) {
                     document.body.removeChild(posterContainer);
                 }

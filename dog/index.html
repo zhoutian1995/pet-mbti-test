@@ -11,6 +11,12 @@
         .progress-bar { transition: width 0.3s ease; }
         .option-btn { transition: all 0.2s ease; }
         .option-btn:hover { transform: translateY(-2px); }
+        /* MODIFIED: 2026-03-23 - Phase 2 选项高亮 */
+        .option-btn.selected {
+            ring: 2px solid #34d399;
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.5);
+        }
     </style>
 </head>
 <body class="bg-[#050505] text-neutral-300 font-sans antialiased min-h-screen">

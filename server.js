@@ -2,10 +2,37 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
+
+// Security middleware - MODIFIED: 2026-03-23 - Phase 1 安全加固
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "cdn.tailwindcss.com", "code.iconify.design"],
+      styleSrc: ["'self'", "'unsafe-inline'", "fonts.googleapis.com"],
+      fontSrc: ["'self'", "fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "blob:"],
+      connectSrc: ["'self'"]
+    }
+  }
+}));
+
+// Rate limiting - 100 requests per 15 minutes
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: { error: 'Too many requests, please try again later.' }
+});
+app.use('/api/', limiter);
+
+// Request body size limit
+app.use(express.json({ limit: '10kb' }));
 
 // Middleware
 // CORS 配置 - 限制允许的域名
@@ -109,4 +136,29 @@ app.get('/api/count', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`MBTI Test API running on port ${PORT}`);
+});
+
+// Graceful shutdown - MODIFIED: 2026-03-23 - Phase 1 安全加固
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received: closing HTTP server');
+  db.close((err) => {
+    if (err) {
+      console.error('Error closing database:', err);
+    } else {
+      console.log('Database connection closed');
+    }
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT signal received: closing HTTP server');
+  db.close((err) => {
+    if (err) {
+      console.error('Error closing database:', err);
+    } else {
+      console.log('Database connection closed');
+    }
+    process.exit(0);
+  });
 });
