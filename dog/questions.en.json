@@ -1,0 +1,152 @@
+[
+  {
+    "id": 1,
+    "question": "When guests visit, how does your dog react?",
+    "options": [
+      {"text": "Wags tail and actively approaches to welcome", "score": {"E": 3}},
+      {"text": "Barks a few times then observes", "score": {"I": 2}},
+      {"text": "Continues playing, doesn't care much", "score": {"I": 2}},
+      {"text": "Hides and won't come out", "score": {"I": 3}}
+    ]
+  },
+  {
+    "id": 2,
+    "question": "When you bring home a new toy, how does your dog react?",
+    "options": [
+      {"text": "Excitedly plays non-stop, won't put it down", "score": {"N": 3}},
+      {"text": "Sniffs it first, then plays for a while", "score": {"N": 2}},
+      {"text": "Barks a few times then walks away", "score": {"S": 2}},
+      {"text": "Has no interest at all", "score": {"S": 3}}
+    ]
+  },
+  {
+    "id": 3,
+    "question": "When giving your dog a bath, how does it react?",
+    "options": [
+      {"text": "Cooperates well, enjoys the bath", "score": {"F": 3}},
+      {"text": "Struggles a bit but accepts it", "score": {"F": 2}},
+      {"text": "Resists wildly, shakes and splashes", "score": {"T": 2}},
+      {"text": "Runs away immediately and hides", "score": {"T": 3}}
+    ]
+  },
+  {
+    "id": 4,
+    "question": "What does your dog enjoy most?",
+    "options": [
+      {"text": "Going out for walks, exploring everywhere", "score": {"P": 3}},
+      {"text": "Playing with toys at home", "score": {"P": 2}},
+      {"text": "Lying down and resting", "score": {"J": 2}},
+      {"text": "Eating and sleeping only", "score": {"J": 3}}
+    ]
+  },
+  {
+    "id": 5,
+    "question": "When you call your dog's name, how does it respond?",
+    "options": [
+      {"text": "Immediately rushes over, wagging tail", "score": {"E": 3}},
+      {"text": "Looks at you then slowly walks over", "score": {"I": 2}},
+      {"text": "Moves ears but doesn't get up", "score": {"I": 2}},
+      {"text": "Completely ignores, as if didn't hear", "score": {"I": 3}}
+    ]
+  },
+  {
+    "id": 6,
+    "question": "When new furniture arrives, how does your dog react?",
+    "options": [
+      {"text": "Immediately sniffs and explores everywhere", "score": {"N": 3}},
+      {"text": "Observes for a while, then approaches", "score": {"N": 2}},
+      {"text": "Watches from afar, not very interested", "score": {"S": 2}},
+      {"text": "Doesn't notice the change at all", "score": {"S": 3}}
+    ]
+  },
+  {
+    "id": 7,
+    "question": "When you catch your dog doing something wrong, how does it react?",
+    "options": [
+      {"text": "Acts innocent, rubs against you to be cute", "score": {"F": 3}},
+      {"text": "Tucks tail, looks guilty", "score": {"F": 2}},
+      {"text": "Acts defiant, won't admit fault", "score": {"T": 2}},
+      {"text": "Immediately runs away and hides", "score": {"T": 3}}
+    ]
+  },
+  {
+    "id": 8,
+    "question": "When you work from home, how does your dog behave?",
+    "options": [
+      {"text": "Constantly disturbs, wants you to play", "score": {"P": 3}},
+      {"text": "Occasionally comes over to rub against you", "score": {"P": 2}},
+      {"text": "Quietly stays nearby", "score": {"J": 2}},
+      {"text": "Doesn't disturb at all, sleeps alone", "score": {"J": 3}}
+    ]
+  },
+  {
+    "id": 9,
+    "question": "What is your dog's eating habit?",
+    "options": [
+      {"text": "Eats whenever, no fixed schedule", "score": {"P": 3}},
+      {"text": "Roughly fixed but occasionally varies", "score": {"P": 2}},
+      {"text": "Basically at fixed times", "score": {"J": 2}},
+      {"text": "Very punctual, urges you at mealtimes", "score": {"J": 3}}
+    ]
+  },
+  {
+    "id": 10,
+    "question": "When you come home after going out, how does your dog react?",
+    "options": [
+      {"text": "Crazy welcome, jumping and rubbing everywhere", "score": {"E": 3}},
+      {"text": "Wags tail and slowly comes over", "score": {"I": 2}},
+      {"text": "Looks at you then continues sleeping", "score": {"I": 2}},
+      {"text": "No reaction at all", "score": {"I": 3}}
+    ]
+  },
+  {
+    "id": 11,
+    "question": "How does your dog prefer to play?",
+    "options": [
+      {"text": "Interacts with you, plays fetch", "score": {"N": 3}},
+      {"text": "Bites toys alone", "score": {"N": 2}},
+      {"text": "Chases things around", "score": {"S": 2}},
+      {"text": "Sleeps, doesn't play much", "score": {"S": 3}}
+    ]
+  },
+  {
+    "id": 12,
+    "question": "When a new dog comes to your home, how does yours react?",
+    "options": [
+      {"text": "Actively approaches, wants to play together", "score": {"F": 3}},
+      {"text": "Keeps distance, gets familiar slowly", "score": {"F": 2}},
+      {"text": "Watches alertly, ready to defend", "score": {"T": 2}},
+      {"text": "Hides immediately", "score": {"T": 3}}
+    ]
+  },
+  {
+    "id": 13,
+    "question": "Where does your dog like to sleep?",
+    "options": [
+      {"text": "Various places, not fixed", "score": {"P": 3}},
+      {"text": "Rotates between a few favorite spots", "score": {"P": 2}},
+      {"text": "Fixed few places", "score": {"J": 2}},
+      {"text": "Always the same place", "score": {"J": 3}}
+    ]
+  },
+  {
+    "id": 14,
+    "question": "When you're sad, how does your dog react?",
+    "options": [
+      {"text": "Actively comes to comfort you", "score": {"F": 3}},
+      {"text": "Senses something, comes closer", "score": {"F": 2}},
+      {"text": "Doesn't react much", "score": {"T": 2}},
+      {"text": "Feels nothing at all", "score": {"T": 3}}
+    ]
+  },
+  {
+    "id": 15,
+    "question": "How strong is your dog's territorial instinct?",
+    "options": [
+      {"text": "Very strong, barks when strangers approach", "score": {"E": 3}},
+      {"text": "A bit strong but can accept strangers", "score": {"I": 2}},
+      {"text": "Doesn't care much", "score": {"I": 2}},
+      {"text": "None at all", "score": {"I": 3}}
+    ]
+  }
+]

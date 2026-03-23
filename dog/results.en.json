@@ -1,0 +1,146 @@
+{
+  "ENFP": {
+    "type": "ENFP",
+    "title": "Social Ceiling",
+    "breeds": "Golden Retriever, Labrador",
+    "desc": "Your dog is a typical social ceiling, wags tail at everyone, wants to find friends when going out. Needs lots of daily interaction, not suitable for long periods alone. The star of the dog park and best companion.",
+    "tags": ["Friendly to All", "Social Ceiling", "Attention Seeker"],
+    "quote": "I'm not clingy, I just love this world too much",
+    "tips": ["Take it out to socialize, at least 1 hour daily", "Not suitable for long alone time, easily anxious", "Good for dog parks, needs friends", "Give it lots of love and attention"]
+  },
+  "INTJ": {
+    "type": "INTJ",
+    "title": "Independent Thinker",
+    "breeds": "Shiba Inu, Chow Chow",
+    "desc": "Quietly observes, has its own ideas. Seems aloof but actually thinking about dog life. Not too clingy but very loyal.",
+    "tags": ["Cool", "Independent", "Thinker"],
+    "quote": "Don't bother me, I'm thinking about life",
+    "tips": ["Give it independent space, don't force hugs", "Respect its boundaries", "Conquer it with intelligence, not food", "Interact when it approaches"]
+  },
+  "ISFP": {
+    "type": "ISFP",
+    "title": "Clingy Little Jacket",
+    "breeds": "Bichon Frise, Poodle",
+    "desc": "Follows you 24/7, goes wherever you go. Gentle and sensitive, full of artistic temperament. Can sense your emotions instantly.",
+    "tags": ["Clingy", "Gentle", "Little Jacket"],
+    "quote": "Where you go, I go. Can't shake me off",
+    "tips": ["Hug it more, satisfy its security needs", "Not suitable for long alone time", "Treat it gently, it's very sensitive", "Prepare a comfortable nest"]
+  },
+  "ESTP": {
+    "type": "ESTP",
+    "title": "Athletic Champion",
+    "breeds": "Border Collie, Siberian Husky",
+    "desc": "Full of energy, needs daily walks. Super athletic, expert at frisbee and running. House is never boring.",
+    "tags": ["Energetic", "Athletic Champion", "Frisbee Expert"],
+    "quote": "Let's go out! Now! Immediately!",
+    "tips": ["At least 2 hours outdoor activity daily", "Prepare frisbees and ball toys", "Consider dog parks to release energy", "Not suitable for apartment living"]
+  },
+  "INFJ": {
+    "type": "INFJ",
+    "title": "Healing Angel",
+    "breeds": "Golden Retriever, Newfoundland",
+    "desc": "Quiet companion, comes to comfort you when you're sad. Deep and mysterious, strong empathy. Best emotional support.",
+    "tags": ["Healing", "Angel", "Soulmate"],
+    "quote": "I understand your sadness, let me accompany you",
+    "tips": ["Cherish this quiet companionship", "It can also sense your emotions", "Don't let down its trust", "Give it warm responses"]
+  },
+  "ENTP": {
+    "type": "ENTP",
+    "title": "Smart Mischievous",
+    "breeds": "Border Collie, Poodle",
+    "desc": "Smart but loves to make trouble, expert at opening doors and cabinets. Full of curiosity, wants to try everything. House is never boring.",
+    "tags": ["Smart", "Mischievous", "Curious"],
+    "quote": "Just seeing if I can open this",
+    "tips": ["Prepare puzzle toys", "Put away dangerous items", "Explore new things with it", "Play with intelligence"]
+  },
+  "ISTJ": {
+    "type": "ISTJ",
+    "title": "Routine Veteran",
+    "breeds": "German Shepherd, Rottweiler",
+    "desc": "Eats and walks on time every day, unshakeable. Likes familiar environments and routines. Stable and reliable, never causes trouble.",
+    "tags": ["Routine", "Stable", "Veteran"],
+    "quote": "It's time, need to go out",
+    "tips": ["Keep fixed schedule", "Don't randomly change environment", "It likes familiar things", "Respect its habits"]
+  },
+  "ESFJ": {
+    "type": "ESFJ",
+    "title": "Caring Little Sun",
+    "breeds": "Golden Retriever, Labrador",
+    "desc": "Always pays attention to your needs, actively pleases. Warm and friendly, likes everyone. The family's little sun.",
+    "tags": ["Caring", "Enthusiastic", "Little Sun"],
+    "quote": "Do you need me? I'm always here",
+    "tips": ["Respond to its enthusiasm", "It needs the same attention", "Don't neglect it", "Good for households with elderly"]
+  },
+  "INTP": {
+    "type": "INTP",
+    "title": "Independent Thinker",
+    "breeds": "Shiba Inu, Pug",
+    "desc": "Likes staying alone, thinking about problems. Not too clingy, but not aloof either. Has its own little world.",
+    "tags": ["Independent", "Thinker", "Scholar"],
+    "quote": "Let me be alone for a while",
+    "tips": ["Give it independent thinking space", "Don't force interaction", "It will come find you when it wants to play", "Respect its boundaries"]
+  },
+  "ESTJ": {
+    "type": "ESTJ",
+    "title": "Home Guardian",
+    "breeds": "German Shepherd, Doberman",
+    "desc": "Strong territorial awareness, barks when strangers approach. Strong protective instinct, family guardian. Loyal and reliable, never retreats.",
+    "tags": ["Territorial", "Guardian", "Loyal"],
+    "quote": "I'll protect this home",
+    "tips": ["Respect its territorial awareness", "Don't challenge its authority", "It's a serious guardian", "Needs appropriate training"]
+  },
+  "ISFJ": {
+    "type": "ISFJ",
+    "title": "Gentle Guardian",
+    "breeds": "Beagle, Basset Hound",
+    "desc": "Gentle and quiet, silently guards. Doesn't express much but is always there. Loyal and reliable, never leaves.",
+    "tags": ["Gentle", "Guardian", "Loyal"],
+    "quote": "I will always be here",
+    "tips": ["Cherish this quiet guardianship", "It doesn't express but cares a lot", "Don't let down its loyalty", "Give it security"]
+  },
+  "ENFJ": {
+    "type": "ENFJ",
+    "title": "Natural Leader",
+    "breeds": "Golden Retriever, Labrador",
+    "desc": "Born leader, core of multi-dog households. Good at coordinating relationships, caring for other dogs. Responsible, strong protective instinct.",
+    "tags": ["Leader", "Responsibility", "Protective"],
+    "quote": "I'll protect this home",
+    "tips": ["It's the core of multi-dog households", "Give it the status it deserves", "It will also care for other dogs", "Good for multi-dog households"]
+  },
+  "INFP": {
+    "type": "INFP",
+    "title": "Dreamy Artist",
+    "breeds": "Afghan Hound, Old English Sheepdog",
+    "desc": "Sensitive and delicate, artistic temperament. Likes quiet corners, immersed in its own world. Gentle but has boundaries.",
+    "tags": ["Sensitive", "Artistic", "Dreamy"],
+    "quote": "My world is beautiful",
+    "tips": ["Respect its artistic temperament", "Don't disturb its dreamy moments", "Very sensitive, treat gently", "Give it quiet space"]
+  },
+  "ESFP": {
+    "type": "ESFP",
+    "title": "Joy Maker",
+    "breeds": "Bichon Frise, Pomeranian",
+    "desc": "Lively and active, always full of energy. Likes to make you happy, family's joy. Friendly to everyone, never gets angry.",
+    "tags": ["Lively", "Joy Maker", "Full of Energy"],
+    "quote": "Come play! Don't be sad!",
+    "tips": ["Play with it more", "Needs lots of interaction", "Can make you happy", "Good for families with kids"]
+  },
+  "ISTP": {
+    "type": "ISTP",
+    "title": "Tech Geek",
+    "breeds": "Dachshund, Corgi",
+    "desc": "Likes researching things, how to open doors and cabinets. Strong hands-on skills, solves problems independently. Not too clingy but very smart.",
+    "tags": ["Tech Geek", "Smart", "Independent"],
+    "quote": "Let me research how to open this",
+    "tips": ["Prepare puzzle toys", "Likes researching things", "Don't disturb its research", "Play with intelligence"]
+  },
+  "ENTJ": {
+    "type": "ENTJ",
+    "title": "Strategist",
+    "breeds": "Rottweiler, German Shepherd",
+    "desc": "Clear goals, strong execution. Gets what it wants. Good at planning, family's strategist.",
+    "tags": ["Strategy", "Execution", "Clear Goals"],
+    "quote": "What I want, I will get",
+    "tips": ["It has clear goals, don't stop it", "It's a serious strategist", "Respect its decisions", "Will be a good leader"]
+  }
+}

@@ -6,8 +6,10 @@
     <title>MBTI 测试结果</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         body { background: #050505; }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap');
     </style>
 </head>
 <body class="bg-[#050505] text-neutral-300 font-sans antialiased min-h-screen">
@@ -17,7 +19,10 @@
             <iconify-icon id="species-icon" width="24"></iconify-icon>
             <span class="text-sm font-medium tracking-tighter text-white uppercase">Protocol Complete</span>
         </div>
-        <a href="../" class="text-xs text-neutral-500 hover:text-white">重新测试</a>
+        <div class="flex items-center gap-4">
+            <button onclick="switchLanguage()" class="text-xs text-neutral-500 hover:text-white border border-neutral-700 px-3 py-1 rounded-full hover:border-neutral-500 transition-all" id="lang-btn">EN</button>
+            <a href="./" class="text-xs text-neutral-500 hover:text-white" data-i18n="retest">重新测试</a>
+        </div>
     </header>
 
     <!-- Result Container -->
@@ -30,7 +35,7 @@
         <div class="bg-neutral-900/50 border border-neutral-800 rounded-2xl p-6 mb-6">
             <div class="flex items-center gap-2 text-neutral-500 text-sm mb-3">
                 <iconify-icon icon="solar:dna-linear" width="16"></iconify-icon>
-                <span>常见品种</span>
+                <span data-i18n="breeds_label">常见品种</span>
             </div>
             <div id="breeds" class="text-white"></div>
         </div>
@@ -42,29 +47,69 @@
         <div id="tags-container" class="flex flex-wrap gap-2 mb-6"></div>
 
         <div class="bg-neutral-900/50 border border-neutral-800 rounded-2xl p-6 mb-6">
-            <div class="text-neutral-500 text-sm mb-2">专属语录</div>
+            <div class="text-neutral-500 text-sm mb-2" data-i18n="quote_label">专属语录</div>
             <div id="quote" class="text-white italic"></div>
         </div>
 
         <div class="bg-neutral-900/50 border border-neutral-800 rounded-2xl p-6 mb-6">
-            <div class="text-neutral-500 text-sm mb-3">相处指南</div>
+            <div class="text-neutral-500 text-sm mb-3" data-i18n="tips_label">相处指南</div>
             <ul id="tips-container" class="space-y-2"></ul>
         </div>
 
-        <!-- Share Button -->
-        <div class="text-center mt-8">
-            <button id="share-btn" class="px-6 py-3 bg-neutral-800 hover:bg-neutral-700 rounded-xl text-white font-medium">
-                <iconify-icon icon="solar:share-linear" width="20" class="mr-2"></iconify-icon>
-                分享结果
+        <!-- Share Button - P1 修复：更大更醒目 -->
+        <div class="text-center mt-10">
+            <button id="share-btn" class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-2xl text-white font-bold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1" style="height: 56px; font-size: 18px; min-width: 200px;">
+                <iconify-icon icon="solar:share-linear" width="22" class="mr-2"></iconify-icon>
+                <span data-i18n="share">生成海报</span>
             </button>
         </div>
     </main>
 
     <script>
+        // Language switch
+        function getLanguage() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('lang') || 'zh';
+        }
+        function switchLanguage() {
+            const lang = getLanguage() === 'zh' ? 'en' : 'zh';
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', lang);
+            window.location.href = url.toString();
+        }
+        function updateLangButton() {
+            const lang = getLanguage();
+            document.getElementById('lang-btn').textContent = lang === 'zh' ? 'EN' : '中文';
+            document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+        }
+        
+        // Translation labels
+        const i18nLabels = {
+            'retest': {'zh': '重新测试', 'en': 'Retest'},
+            'breeds_label': {'zh': '常见品种', 'en': 'Common Breeds'},
+            'quote_label': {'zh': '专属语录', 'en': 'Signature Quote'},
+            'tips_label': {'zh': '相处指南', 'en': 'Care Tips'},
+            'share': {'zh': '生成海报', 'en': 'Generate Poster'}
+        };
+        
+        function updateLabels() {
+            const lang = getLanguage();
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18nLabels[key] && i18nLabels[key][lang]) {
+                    el.textContent = i18nLabels[key][lang];
+                }
+            });
+        }
+
         // Get URL params
         const params = new URLSearchParams(window.location.search);
         const mbtiType = params.get('type') || 'ENFP';
         const species = params.get('species') || 'cat';
+        const lang = getLanguage();
+
+        updateLangButton();
+        updateLabels();
 
         // Set icon
         const icon = document.getElementById('species-icon');
@@ -76,15 +121,22 @@
             icon.classList.add('text-emerald-400');
         }
 
-        // Load results
-        fetch(`${species}/results.json`)
+        // Load results based on language
+        const resultsFile = lang === 'en' ? `${species}/results.en.json` : `${species}/results.json`;
+        
+        // Store result data globally for poster generation
+        let resultData = null;
+        
+        fetch(resultsFile)
             .then(r => r.json())
             .then(data => {
                 const result = data[mbtiType];
                 if (!result) {
-                    document.getElementById('result-container').innerHTML = '<p class="text-center text-neutral-500">未找到结果</p>';
+                    document.getElementById('result-container').innerHTML = '<p class="text-center text-neutral-500">Result not found</p>';
                     return;
                 }
+                
+                resultData = result;
 
                 document.getElementById('mbti-type').textContent = result.type;
                 document.getElementById('result-title').textContent = result.title;
@@ -101,28 +153,134 @@
                     tagsContainer.appendChild(span);
                 });
 
-                // Tips
+                // Tips - P1 修复：列表间距和对齐
                 const tipsContainer = document.getElementById('tips-container');
-                result.tips.forEach(tip => {
+                result.tips.forEach((tip, index) => {
                     const li = document.createElement('li');
-                    li.className = 'text-neutral-300 flex items-start gap-2';
-                    li.innerHTML = `<iconify-icon icon="solar:check-circle-linear" width="18" class="text-emerald-400 mt-0.5 shrink-0"></iconify-icon><span>${tip}</span>`;
+                    li.className = 'text-neutral-300 flex items-center gap-3 mb-3';
+                    li.style.marginBottom = '12px';
+                    li.innerHTML = `<iconify-icon icon="solar:check-circle-linear" width="20" class="text-emerald-400 shrink-0"></iconify-icon><span style="font-size: 15px; font-weight: 500;">${tip}</span>`;
                     tipsContainer.appendChild(li);
                 });
             });
 
-        // Share button
+        // Share button - generate poster
         document.getElementById('share-btn').onclick = () => {
-            if (navigator.share) {
-                navigator.share({
-                    title: `我的${species === 'cat' ? '猫咪' : '狗狗'}是 ${mbtiType} 型！`,
-                    text: `测试发现我的${species === 'cat' ? '猫咪' : '狗狗'}是 ${mbtiType} 型！快来测测你的吧！`,
-                    url: window.location.origin
-                });
-            } else {
-                alert('复制链接分享给朋友！');
+            if (!resultData) return;
+            
+            // Create poster container (hidden, off-screen)
+            const posterContainer = document.createElement('div');
+            posterContainer.style.cssText = 'position: fixed; top: -9999px; left: -9999px; font-family: "JetBrains Mono", monospace;';
+            
+            const isCat = species === 'cat';
+            const petEmoji = isCat ? '🐱' : '🐶';
+            const glowColor = isCat ? 'rgba(139,92,246,0.3)' : 'rgba(16,185,129,0.3)';
+            const avatarSrc = `https://willeai.cn/for-human/mbti-test/assets/${species}-${mbtiType}.png`;
+            console.log('海报生成 - 头像路径:', avatarSrc);
+            
+            posterContainer.innerHTML = `
+                <div id="poster-to-generate" style="
+                    width: 1080px;
+                    height: 1920px;
+                    background: linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <!-- Grid Background -->
+                    <div style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 60px 60px;"></div>
+                    
+                    <!-- Glow Effect -->
+                    <div style="position: absolute; top: -5%; left: 50%; transform: translateX(-50%); width: 700px; height: 400px; background: radial-gradient(ellipse, ${glowColor} 0%, transparent 70%); filter: blur(100px); border-radius: 50%;"></div>
+                    <div style="position: absolute; bottom: -5%; left: 50%; transform: translateX(-50%); width: 600px; height: 350px; background: radial-gradient(ellipse, ${glowColor.replace('0.3', '0.15')} 0%, transparent 70%); filter: blur(100px); border-radius: 50%;"></div>
+                    
+                    <!-- Header - 优化间距和字重 -->
+                    <div style="position: relative; z-index: 10; padding: 60px 60px 30px; text-align: center;">
+                        <h1 style="font-size: 52px; font-weight: 900; color: #ffffff; letter-spacing: 4px; margin: 0; line-height: 1.3; text-shadow: 0 2px 20px rgba(255,255,255,0.1);">宠物认知测试</h1>
+                        <div style="font-size: 16px; color: #666; margin-top: 16px; letter-spacing: 8px; text-transform: uppercase; font-weight: 400;">PET COGNITIVE PROFILING</div>
+                    </div>
+                    
+                    <!-- Avatar Image - 修复尺寸 -->
+                    <div style="position: relative; z-index: 10; padding: 40px 40px 50px; display: flex; justify-content: center; align-items: center;">
+                        <img src="${avatarSrc}" style="width: 380px; height: 380px; border-radius: 24px; background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%); border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 20px 60px ${glowColor.replace('0.3', '0.4')}; object-fit: cover; display: block;">
+                    </div>
+                    
+                    <!-- Result Section - P0 修复 -->
+                    <div style="position: relative; z-index: 10; padding: 30px 60px 40px; text-align: center;">
+                        <div style="font-size: 90px; font-weight: 900; color: #ffffff; letter-spacing: -4px; margin: 0; text-shadow: 0 4px 40px rgba(255,255,255,0.2);">${resultData.type}</div>
+                        <div style="font-size: 32px; color: #cccccc; margin: 24px 0 40px; font-weight: 700; letter-spacing: 3px;">${resultData.title}</div>
+                        
+                        <!-- Tags - P0 精确修复 -->
+                        <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 45px;">
+                            ${resultData.tags.map(tag => `<span style="display: inline-flex; align-items: center; justify-content: center; min-width: 150px; padding: 14px 24px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 24px; color: #ffffff; font-size: 15px; font-weight: 600; letter-spacing: 1px;">#${tag}</span>`).join('')}
+                        </div>
+                        
+                        <!-- Divider -->
+                        <div style="height: 2px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); margin: 40px 0;"></div>
+                        
+                        <!-- Quote - P1 精确修复 -->
+                        <div style="font-size: 18px; color: #aaaaaa; font-style: italic; line-height: 1.9; max-width: 650px; margin: 35px auto 0; padding: 20px 35px; position: relative; background: rgba(255,255,255,0.05); border-radius: 14px;">
+                            <span style="font-size: 48px; color: #666666; position: absolute; top: -5px; left: 15px;">"</span>
+                            <span style="position: relative; z-index: 1;">${resultData.quote}</span>
+                            <span style="font-size: 48px; color: #666666; position: absolute; bottom: -25px; right: 15px;">"</span>
+                        </div>
+                    </div>
+                    
+                    <!-- QR Code Section - 缩小二维码，统一文字 -->
+                    <div style="position: relative; z-index: 10; padding: 60px 60px 50px; text-align: center;">
+                        <img src="assets/qrcode_final.png" style="width: 240px; height: 240px; margin: 0 auto 28px; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4);">
+                        <div style="font-size: 18px; color: #888888; margin-bottom: 14px; font-weight: 500; letter-spacing: 1px;">${lang === 'en' ? 'Scan to test your pet' : '关注公众号发送"MBTI"'}</div>
+                        <div style="font-size: 16px; color: #666666; letter-spacing: 2px; font-weight: 400;">willeai.cn/for-human/</div>
+                    </div>
+                </div>
+            `;
+            
+            // Create modal overlay to display poster
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;';
+            modal.innerHTML = `
+                <div style="color: #fff; font-size: 20px; margin-bottom: 20px; font-weight: 500;">📱 长按图片保存到相册</div>
+                <div id="poster-display" style="max-width: 100%; max-height: 70vh; overflow: hidden; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);"></div>
+                <button onclick="this.closest('div[style*=fixed]').remove()" style="margin-top: 20px; padding: 14px 40px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; font-size: 16px; cursor: pointer;">❌ 关闭</button>
+            `;
+            document.body.appendChild(modal);
+            
+            document.body.appendChild(posterContainer);
+            
+            // Wait for avatar image to load
+            const avatarImg = posterContainer.querySelector('img[src*="assets/"]');
+            if (avatarImg) {
+                avatarImg.crossOrigin = 'anonymous';
             }
+            
+            // Generate image
+            html2canvas(posterContainer.querySelector('#poster-to-generate'), {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#050505',
+                logging: false,
+                imageTimeout: 15000
+            }).then(canvas => {
+                // Display poster in modal
+                const posterDisplay = modal.querySelector('#poster-display');
+                posterDisplay.innerHTML = '';
+                const img = document.createElement('img');
+                img.src = canvas.toDataURL('image/png');
+                img.style.cssText = 'max-width: 100%; max-height: 70vh; display: block;';
+                posterDisplay.appendChild(img);
+                
+                // Cleanup hidden container
+                document.body.removeChild(posterContainer);
+            }).catch(err => {
+                console.error('Poster generation failed:', err);
+                alert(lang === 'en' ? 'Failed to generate poster.' : '生成海报失败！');
+                if (posterContainer.parentNode) {
+                    document.body.removeChild(posterContainer);
+                }
+                if (modal.parentNode) {
+                    document.body.removeChild(modal);
+                }
+            });
         };
     </script>
-</body>
-</html>
+</body></html>

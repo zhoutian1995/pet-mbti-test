@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>狗狗 MBTI 测试 - Canine Protocol</title>
+    <title>猫咪 MBTI 测试 - Canine Protocol</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <style>
@@ -32,8 +32,11 @@
                 <iconify-icon icon="solar:bone-linear" width="24" class="text-emerald-400"></iconify-icon>
                 <span class="text-sm font-medium tracking-tighter text-white uppercase">Canine Protocol</span>
             </div>
-            <div class="text-xs font-mono text-neutral-600">
-                <span id="question-counter">1/15</span>
+            <div class="flex items-center gap-4">
+                <button onclick="switchLanguage()" class="text-xs text-neutral-500 hover:text-white border border-neutral-700 px-3 py-1 rounded-full hover:border-neutral-500 transition-all" id="lang-btn">EN</button>
+                <span class="text-xs font-mono text-neutral-600">
+                    <span id="question-counter">1/15</span>
+                </span>
             </div>
         </header>
 
@@ -47,11 +50,34 @@
             <div id="question-container">
                 <h2 id="question-text" class="text-2xl font-medium text-white mb-8"></h2>
                 <div id="options-container" class="space-y-3"></div>
+                
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between mt-8">
+                    <button id="prev-btn" onclick="prevQuestion()" class="px-6 py-2 rounded-lg border border-neutral-700 text-neutral-400 hover:text-white hover:border-neutral-500 transition-all disabled:opacity-30 disabled:cursor-not-allowed" disabled>← Previous</button>
+                    <span class="text-xs text-neutral-600 font-mono" data-i18n="question_progress">Question <span id="q-num">1</span> of <span id="q-total">15</span></span>
+                </div>
             </div>
         </main>
     </div>
 
     <script>
+        // Language switch
+        function getLanguage() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('lang') || 'zh';
+        }
+        function switchLanguage() {
+            const lang = getLanguage() === 'zh' ? 'en' : 'zh';
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', lang);
+            window.location.href = url.toString();
+        }
+        function updateLangButton() {
+            const lang = getLanguage();
+            document.getElementById('lang-btn').textContent = lang === 'zh' ? 'EN' : '中文';
+            document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+        }
+
         // Loading animation
         let loadProgress = 0;
         const loadInterval = setInterval(() => {
@@ -71,9 +97,16 @@
         let questions = [];
         let currentQuestion = 0;
         let scores = { E: 0, I: 0, N: 0, S: 0, F: 0, T: 0, J: 0, P: 0 };
+        let userAnswers = []; // Store user answers
 
-        // Load questions
-        fetch('questions.json')
+        // Load questions based on language
+        const lang = getLanguage();
+        const questionsFile = lang === 'en' ? 'questions.en.json' : 'questions.json';
+        
+        updateLangButton();
+        
+        // 添加时间戳防止缓存
+        fetch(questionsFile + '?t=' + Date.now())
             .then(r => r.json())
             .then(data => {
                 questions = data;
@@ -83,8 +116,14 @@
         function showQuestion() {
             const q = questions[currentQuestion];
             document.getElementById('question-text').textContent = q.question;
-            document.getElementById('question-counter').textContent = `${currentQuestion + 1}/15`;
-            document.getElementById('progress').style.width = `${((currentQuestion + 1) / 15) * 100}%`;
+            document.getElementById('question-counter').textContent = `${currentQuestion + 1}/${questions.length}`;
+            document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+            document.getElementById('q-num').textContent = currentQuestion + 1;
+            document.getElementById('q-total').textContent = questions.length;
+
+            // Update Previous button state
+            const prevBtn = document.getElementById('prev-btn');
+            prevBtn.disabled = (currentQuestion === 0);
 
             const container = document.getElementById('options-container');
             container.innerHTML = '';
@@ -98,16 +137,33 @@
             });
         }
 
-        function selectOption(score) {
-            for (const [dim, val] of Object.entries(score)) {
-                scores[dim] += val;
-            }
+        function selectOption(score, index) {
+            // Store or update answer
+            userAnswers[currentQuestion] = { score, index };
+
+            // Add scores (recalculate from scratch each time)
+            scores = { E: 0, I: 0, N: 0, S: 0, F: 0, T: 0, J: 0, P: 0 };
+            userAnswers.forEach(answer => {
+                for (const [dim, val] of Object.entries(answer.score)) {
+                    scores[dim] += val;
+                }
+            });
 
             currentQuestion++;
             if (currentQuestion >= questions.length) {
+                // Calculate result
                 const result = calculateMBTI();
-                window.location.href = `../result.html?type=${result}&species=dog`;
+                // Redirect to result page with language parameter
+                const lang = getLanguage();
+                window.location.href = `../result.html?type=${result}&species=dog&lang=${lang}`;
             } else {
+                showQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
                 showQuestion();
             }
         }
@@ -120,5 +176,4 @@
             return e_i + n_s + f_t + j_p;
         }
     </script>
-</body>
-</html>
+</body></html>

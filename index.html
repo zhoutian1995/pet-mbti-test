@@ -1,9 +1,57 @@
-<html lang="en"><head>
+<html lang="zh-CN"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Cognitive Profiling</title>
+    <title>宠物 MBTI 性格测试</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <script>
+        // 语言切换逻辑
+        function getLanguage() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('lang') || 'zh';
+        }
+        function switchLanguage(lang) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', lang);
+            window.location.href = url.toString();
+        }
+        function updatePageLanguage() {
+            const lang = getLanguage();
+            document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+            
+            // 更新所有带 data-i18n 属性的元素
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[key] && i18n[key][lang]) {
+                    el.textContent = i18n[key][lang];
+                }
+            });
+            
+            // 更新标题
+            const titles = {
+                'zh': '宠物 MBTI 性格测试',
+                'en': 'Pet MBTI Personality Test'
+            };
+            document.title = titles[lang] || titles['zh'];
+        }
+        
+        // 翻译文本
+        const i18n = {
+            'brand': {'zh': '宠物认知测试', 'en': 'Pet Cognitive Test'},
+            'status': {'zh': '神经引擎 v3.4 已上线', 'en': 'Neural Engine v3.4 Online'},
+            'title': {'zh': '测测你家主子的性格', 'en': 'Discover Your Pet\'s Personality'},
+            'desc': {'zh': '基于 MBTI 人格理论，通过行为观察解码你家毛孩子的认知模式。选择一个物种开始测试。', 'en': 'Decode your furry friend\'s cognitive patterns through behavioral observation based on MBTI theory. Choose a species to start testing.'},
+            'cat-title': {'zh': '🐱 猫咪协议', 'en': '🐱 Feline Protocol'},
+            'cat-desc': {'zh': '分析自主性、领地意识和亲昵模式，解码你家猫咪的认知栈。', 'en': 'Analyze autonomy markers, territorial awareness, and micro-affection paradigms to decode your cat\'s cognitive stack.'},
+            'dog-title': {'zh': '🐕 狗狗协议', 'en': '🐕 Canine Protocol'},
+            'dog-desc': {'zh': '评估族群层级、外部刺激处理和忠诚驱动的决策模式。', 'en': 'Evaluate pack hierarchy integration, external stimuli processing, and loyalty-driven decision matrices.'},
+            'start': {'zh': '开始测试', 'en': 'Start Test'},
+            'footer': {'zh': '数据已加密且匿名处理', 'en': 'Data encrypted & anonymized'},
+            'lang-switch': {'zh': 'EN', 'en': '中文'}
+        };
+        
+        window.addEventListener('DOMContentLoaded', updatePageLanguage);
+    </script>
 </head>
 <body class="bg-[#050505] text-neutral-300 font-sans antialiased overflow-x-hidden relative min-h-screen selection:bg-neutral-800 selection:text-white">
 
@@ -20,16 +68,9 @@
             <div class="h-6 w-6 rounded-sm border border-neutral-700 bg-neutral-900 flex items-center justify-center">
                 <div class="h-1.5 w-1.5 rounded-full bg-white"></div>
             </div>
-            <span class="text-base font-medium tracking-tighter text-white uppercase">C G N T V .</span>
+            <span class="text-base font-medium tracking-tighter text-white uppercase" data-i18n="brand">宠物认知测试</span>
         </div>
-        <nav class="hidden md:flex gap-8 text-xs font-medium text-neutral-500 uppercase tracking-widest">
-            <a href="#" class="hover:text-white transition-colors duration-300">Methodology</a>
-            <a href="#" class="hover:text-white transition-colors duration-300">Research</a>
-            <a href="#" class="hover:text-white transition-colors duration-300">Client Portal</a>
-        </nav>
-        <button class="md:hidden text-neutral-400 hover:text-white">
-            <iconify-icon icon="solar:hamburger-menu-linear" width="24" height="24" style="stroke-width: 1.5;"></iconify-icon>
-        </button>
+        <button onclick="switchLanguage(getLanguage() === 'zh' ? 'en' : 'zh')" class="text-xs text-neutral-500 hover:text-white border border-neutral-700 px-3 py-1 rounded-full hover:border-neutral-500 transition-all" data-i18n="lang-switch">EN</button>
     </header>
 
     <!-- Main Content -->
@@ -39,15 +80,15 @@
         <div class="text-center space-y-6 mb-20 md:mb-24 w-full">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/50 backdrop-blur-md text-xs font-medium text-neutral-400 mb-2">
                 <iconify-icon icon="solar:radar-2-linear" width="14" height="14" style="stroke-width: 1.5;" class="text-indigo-400"></iconify-icon>
-                <span class="tracking-wide">NEURAL ENGINE v3.4 ONLINE</span>
+                <span class="tracking-wide" data-i18n="status">神经引擎 v3.4 已上线</span>
             </div>
             
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-neutral-200 to-neutral-600 max-w-4xl mx-auto leading-[1.1]">
-                Map Their Consciousness.
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-neutral-200 to-neutral-600 max-w-4xl mx-auto leading-[1.1]" data-i18n="title">
+                测测你家主子的性格
             </h1>
             
-            <p class="text-sm md:text-base text-neutral-400 max-w-2xl mx-auto font-normal leading-relaxed">
-                Utilizing advanced behavioral heuristics and MBTI archetypes to decode the cognitive functions of your domestic companion. Select a biological profile to initialize the sequence.
+            <p class="text-sm md:text-base text-neutral-400 max-w-2xl mx-auto font-normal leading-relaxed" data-i18n="desc">
+                基于 MBTI 人格理论，通过行为观察解码你家毛孩子的认知模式。选择一个物种开始测试。
             </p>
         </div>
 
@@ -56,7 +97,6 @@
 
             <!-- Feline Interface -->
             <a href="cat/" class="group relative flex flex-col p-8 md:p-12 rounded-3xl bg-neutral-900/30 border border-neutral-800/50 backdrop-blur-xl hover:bg-neutral-800/40 hover:border-neutral-700 transition-all duration-700 ease-out overflow-hidden h-full">
-                <!-- Hover Gradient -->
                 <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/0 to-indigo-500/0 group-hover:from-indigo-500/5 group-hover:to-transparent transition-all duration-700 opacity-0 group-hover:opacity-100"></div>
                 
                 <div class="relative z-10 flex flex-col h-full">
@@ -64,23 +104,21 @@
                         <div class="h-14 w-14 rounded-2xl bg-neutral-950/80 border border-neutral-800 flex items-center justify-center shadow-[0_0_30px_-5px_rgba(99,102,241,0.1)] group-hover:shadow-[0_0_30px_-5px_rgba(99,102,241,0.3)] transition-all duration-500 group-hover:scale-105">
                             <iconify-icon icon="solar:cat-linear" width="28" height="28" class="text-neutral-400 group-hover:text-indigo-400 transition-colors duration-500" style="stroke-width: 1.5;"></iconify-icon>
                         </div>
-                        <div class="text-xs font-mono text-neutral-600 tracking-widest uppercase">
-                            SEQ: FL-01
-                        </div>
+                        <div class="text-xs font-mono text-neutral-600 tracking-widest uppercase">SEQ: FL-01</div>
                     </div>
 
                     <div class="mt-auto">
-                        <h2 class="text-3xl font-medium tracking-tight text-neutral-100 mb-3 group-hover:text-white transition-colors">
-                            Feline Protocol
+                        <h2 class="text-3xl font-medium tracking-tight text-neutral-100 mb-3 group-hover:text-white transition-colors" data-i18n="cat-title">
+                            🐱 猫咪协议
                         </h2>
-                        <p class="text-sm text-neutral-500 mb-10 leading-relaxed max-w-sm">
-                            Analyze autonomy markers, territorial spatial awareness, and micro-affection paradigms to determine the feline cognitive stack.
+                        <p class="text-sm text-neutral-500 mb-10 leading-relaxed max-w-sm" data-i18n="cat-desc">
+                            分析自主性、领地意识和亲昵模式，解码你家猫咪的认知栈。
                         </p>
 
                         <div class="flex items-center gap-4">
                             <div class="h-px bg-neutral-800 flex-1 group-hover:bg-indigo-900/50 transition-colors duration-500"></div>
                             <div class="flex items-center gap-2 text-xs font-medium text-neutral-400 uppercase tracking-widest group-hover:text-white transition-colors duration-300">
-                                <span>Initialize</span>
+                                <span data-i18n="start">开始测试</span>
                                 <iconify-icon icon="solar:arrow-right-linear" width="16" height="16" style="stroke-width: 1.5;" class="group-hover:translate-x-1 transition-transform duration-300"></iconify-icon>
                             </div>
                         </div>
@@ -90,7 +128,6 @@
 
             <!-- Canine Interface -->
             <a href="dog/" class="group relative flex flex-col p-8 md:p-12 rounded-3xl bg-neutral-900/30 border border-neutral-800/50 backdrop-blur-xl hover:bg-neutral-800/40 hover:border-neutral-700 transition-all duration-700 ease-out overflow-hidden h-full">
-                <!-- Hover Gradient -->
                 <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/0 to-emerald-500/0 group-hover:from-emerald-500/5 group-hover:to-transparent transition-all duration-700 opacity-0 group-hover:opacity-100"></div>
                 
                 <div class="relative z-10 flex flex-col h-full">
@@ -98,23 +135,21 @@
                         <div class="h-14 w-14 rounded-2xl bg-neutral-950/80 border border-neutral-800 flex items-center justify-center shadow-[0_0_30px_-5px_rgba(16,185,129,0.1)] group-hover:shadow-[0_0_30px_-5px_rgba(16,185,129,0.2)] transition-all duration-500 group-hover:scale-105">
                             <iconify-icon icon="solar:bone-linear" width="28" height="28" class="text-neutral-400 group-hover:text-emerald-400 transition-colors duration-500" style="stroke-width: 1.5;"></iconify-icon>
                         </div>
-                        <div class="text-xs font-mono text-neutral-600 tracking-widest uppercase">
-                            SEQ: CN-02
-                        </div>
+                        <div class="text-xs font-mono text-neutral-600 tracking-widest uppercase">SEQ: CN-02</div>
                     </div>
 
                     <div class="mt-auto">
-                        <h2 class="text-3xl font-medium tracking-tight text-neutral-100 mb-3 group-hover:text-white transition-colors">
-                            Canine Protocol
+                        <h2 class="text-3xl font-medium tracking-tight text-neutral-100 mb-3 group-hover:text-white transition-colors" data-i18n="dog-title">
+                            🐕 狗狗协议
                         </h2>
-                        <p class="text-sm text-neutral-500 mb-10 leading-relaxed max-w-sm">
-                            Evaluate pack hierarchy integration, external stimuli processing, and loyalty-driven decision matrices in your dog.
+                        <p class="text-sm text-neutral-500 mb-10 leading-relaxed max-w-sm" data-i18n="dog-desc">
+                            评估族群层级、外部刺激处理和忠诚驱动的决策模式。
                         </p>
 
                         <div class="flex items-center gap-4">
                             <div class="h-px bg-neutral-800 flex-1 group-hover:bg-emerald-900/50 transition-colors duration-500"></div>
                             <div class="flex items-center gap-2 text-xs font-medium text-neutral-400 uppercase tracking-widest group-hover:text-white transition-colors duration-300">
-                                <span>Initialize</span>
+                                <span data-i18n="start">开始测试</span>
                                 <iconify-icon icon="solar:arrow-right-linear" width="16" height="16" style="stroke-width: 1.5;" class="group-hover:translate-x-1 transition-transform duration-300"></iconify-icon>
                             </div>
                         </div>
@@ -128,10 +163,9 @@
         <div class="mt-20 text-center">
             <p class="text-xs text-neutral-600 font-medium tracking-wider uppercase flex items-center justify-center gap-2">
                 <iconify-icon icon="solar:shield-check-linear" width="14" height="14"></iconify-icon>
-                Data encrypted &amp; anonymized
+                <span data-i18n="footer">数据已加密且匿名处理</span>
             </p>
         </div>
     </main>
-
 
 </body></html>

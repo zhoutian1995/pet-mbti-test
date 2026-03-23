@@ -1,0 +1,152 @@
+[
+  {
+    "id": 1,
+    "question": "When guests visit, how does your cat react?",
+    "options": [
+      {"text": "Actively comes out to greet and rub against guests", "score": {"E": 3}},
+      {"text": "Hides at a distance to observe but doesn't approach", "score": {"I": 2}},
+      {"text": "Completely ignores and continues sleeping", "score": {"I": 3}},
+      {"text": "Hides in the room and won't come out", "score": {"I": 3}}
+    ]
+  },
+  {
+    "id": 2,
+    "question": "When you bring home a new toy, how does your cat react?",
+    "options": [
+      {"text": "Immediately rushes over and plays non-stop", "score": {"N": 3}},
+      {"text": "Sniffs it first, then plays for a while", "score": {"N": 2}},
+      {"text": "Takes a look then walks away", "score": {"S": 2}},
+      {"text": "Has no interest at all", "score": {"S": 3}}
+    ]
+  },
+  {
+    "id": 3,
+    "question": "When giving your cat a bath or trimming nails, how does it react?",
+    "options": [
+      {"text": "Cooperates well with minimal resistance", "score": {"F": 3}},
+      {"text": "Struggles a bit but accepts it", "score": {"F": 2}},
+      {"text": "Resists wildly, scratching and biting", "score": {"T": 2}},
+      {"text": "Runs away immediately, impossible to catch", "score": {"T": 3}}
+    ]
+  },
+  {
+    "id": 4,
+    "question": "What does your cat enjoy most?",
+    "options": [
+      {"text": "Running and jumping around, playing with teaser toys", "score": {"P": 3}},
+      {"text": "Plays occasionally but mostly rests", "score": {"P": 2}},
+      {"text": "Would rather lie down than sit", "score": {"J": 2}},
+      {"text": "Only eats and sleeps", "score": {"J": 3}}
+    ]
+  },
+  {
+    "id": 5,
+    "question": "When you call your cat's name, how does it respond?",
+    "options": [
+      {"text": "Immediately responds and runs over", "score": {"E": 3}},
+      {"text": "Moves ears but doesn't get up", "score": {"I": 2}},
+      {"text": "Takes a look then continues doing its thing", "score": {"I": 2}},
+      {"text": "Completely ignores, as if didn't hear", "score": {"I": 3}}
+    ]
+  },
+  {
+    "id": 6,
+    "question": "When new furniture arrives, how does your cat react?",
+    "options": [
+      {"text": "Immediately explores, sniffing and rubbing against it", "score": {"N": 3}},
+      {"text": "Observes for a while, then approaches", "score": {"N": 2}},
+      {"text": "Watches from afar, not very interested", "score": {"S": 2}},
+      {"text": "Doesn't notice the change at all", "score": {"S": 3}}
+    ]
+  },
+  {
+    "id": 7,
+    "question": "When you catch your cat doing something wrong, how does it react?",
+    "options": [
+      {"text": "Acts innocent, rubs against you to be cute", "score": {"F": 3}},
+      {"text": "Looks guilty, avoids eye contact", "score": {"F": 2}},
+      {"text": "Acts defiant, continues doing it", "score": {"T": 2}},
+      {"text": "Immediately runs away and hides", "score": {"T": 3}}
+    ]
+  },
+  {
+    "id": 8,
+    "question": "When you work from home, how does your cat behave?",
+    "options": [
+      {"text": "Constantly disturbs you, wants to be held", "score": {"P": 3}},
+      {"text": "Occasionally comes over to rub against you", "score": {"P": 2}},
+      {"text": "Quietly stays nearby", "score": {"J": 2}},
+      {"text": "Doesn't disturb at all, plays alone", "score": {"J": 3}}
+    ]
+  },
+  {
+    "id": 9,
+    "question": "What is your cat's eating habit?",
+    "options": [
+      {"text": "Eats whenever, no fixed schedule", "score": {"P": 3}},
+      {"text": "Roughly fixed but occasionally varies", "score": {"P": 2}},
+      {"text": "Basically at fixed times", "score": {"J": 2}},
+      {"text": "Very punctual, calls at mealtimes", "score": {"J": 3}}
+    ]
+  },
+  {
+    "id": 10,
+    "question": "When you come home after going out, how does your cat react?",
+    "options": [
+      {"text": "Enthusiastically welcomes you, rubs everywhere", "score": {"E": 3}},
+      {"text": "Looks at you then continues", "score": {"I": 2}},
+      {"text": "Pretends not to notice", "score": {"I": 2}},
+      {"text": "Hides away, comes out later", "score": {"I": 3}}
+    ]
+  },
+  {
+    "id": 11,
+    "question": "How does your cat prefer to play?",
+    "options": [
+      {"text": "Interacts with you, plays with teaser toys", "score": {"N": 3}},
+      {"text": "Plays with toys alone", "score": {"N": 2}},
+      {"text": "Watches birds outside the window", "score": {"S": 2}},
+      {"text": "Sleeps, doesn't play much", "score": {"S": 3}}
+    ]
+  },
+  {
+    "id": 12,
+    "question": "When a new cat comes to your home, how does yours react?",
+    "options": [
+      {"text": "Actively approaches, wants to play together", "score": {"F": 3}},
+      {"text": "Keeps distance, gets familiar slowly", "score": {"F": 2}},
+      {"text": "Watches alertly, ready to fight", "score": {"T": 2}},
+      {"text": "Hides immediately", "score": {"T": 3}}
+    ]
+  },
+  {
+    "id": 13,
+    "question": "Where does your cat like to sleep?",
+    "options": [
+      {"text": "Various places, not fixed", "score": {"P": 3}},
+      {"text": "Rotates between a few favorite spots", "score": {"P": 2}},
+      {"text": "Fixed few places", "score": {"J": 2}},
+      {"text": "Always the same place", "score": {"J": 3}}
+    ]
+  },
+  {
+    "id": 14,
+    "question": "When you're sad, how does your cat react?",
+    "options": [
+      {"text": "Actively comes to comfort you", "score": {"F": 3}},
+      {"text": "Senses something, comes closer", "score": {"F": 2}},
+      {"text": "Doesn't react much", "score": {"T": 2}},
+      {"text": "Feels nothing at all", "score": {"T": 3}}
+    ]
+  },
+  {
+    "id": 15,
+    "question": "How strong is your cat's territorial instinct?",
+    "options": [
+      {"text": "Very strong, won't let other cats get close", "score": {"E": 3}},
+      {"text": "A bit strong but can accept sharing", "score": {"I": 2}},
+      {"text": "Doesn't care much", "score": {"I": 2}},
+      {"text": "None at all", "score": {"I": 3}}
+    ]
+  }
+]
