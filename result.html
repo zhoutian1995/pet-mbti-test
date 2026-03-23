@@ -175,7 +175,7 @@
             const isCat = species === 'cat';
             const petEmoji = isCat ? '🐱' : '🐶';
             const glowColor = isCat ? 'rgba(139,92,246,0.3)' : 'rgba(16,185,129,0.3)';
-            const avatarSrc = `https://willeai.cn/for-human/mbti-test/assets/${species}-${mbtiType}.png`;
+            const avatarSrc = `assets/${species}-${mbtiType}.png`;
             console.log('海报生成 - 头像路径:', avatarSrc);
             
             posterContainer.innerHTML = `
@@ -233,14 +233,16 @@
                     </div>
                 </div>
             `;
-            
+
             // Create modal overlay to display poster
             const modal = document.createElement('div');
             modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;';
             modal.innerHTML = `
-                <div style="color: #fff; font-size: 20px; margin-bottom: 20px; font-weight: 500;">📱 长按图片保存到相册</div>
+                <div id="poster-loading" style="color: #fff; font-size: 18px; margin-bottom: 20px; font-weight: 500;">
+                    <span class="animate-pulse">⏳ ${lang === 'en' ? 'Generating poster...' : '正在生成海报...'}</span>
+                </div>
                 <div id="poster-display" style="max-width: 100%; max-height: 70vh; overflow: hidden; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);"></div>
-                <button onclick="this.closest('div[style*=fixed]').remove()" style="margin-top: 20px; padding: 14px 40px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; font-size: 16px; cursor: pointer;">❌ 关闭</button>
+                <button onclick="this.closest('div[style*=fixed]').remove()" style="margin-top: 20px; padding: 14px 40px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; font-size: 16px; cursor: pointer;">❌ ${lang === 'en' ? 'Close' : '关闭'}</button>
             `;
             document.body.appendChild(modal);
             
@@ -261,6 +263,10 @@
                 logging: false,
                 imageTimeout: 15000
             }).then(canvas => {
+                // 隐藏加载提示，显示保存提示
+                const loadingEl = modal.querySelector('#poster-loading');
+                loadingEl.innerHTML = `📱 ${lang === 'en' ? 'Long press to save' : '长按图片保存到相册'}`;
+
                 // Display poster in modal
                 const posterDisplay = modal.querySelector('#poster-display');
                 posterDisplay.innerHTML = '';
@@ -268,17 +274,16 @@
                 img.src = canvas.toDataURL('image/png');
                 img.style.cssText = 'max-width: 100%; max-height: 70vh; display: block;';
                 posterDisplay.appendChild(img);
-                
+
                 // Cleanup hidden container
                 document.body.removeChild(posterContainer);
             }).catch(err => {
                 console.error('Poster generation failed:', err);
-                alert(lang === 'en' ? 'Failed to generate poster.' : '生成海报失败！');
+                // 显示错误提示
+                const loadingEl = modal.querySelector('#poster-loading');
+                loadingEl.innerHTML = `<span style="color: #f87171;">❌ ${lang === 'en' ? 'Failed to generate poster' : '生成海报失败'}</span>`;
                 if (posterContainer.parentNode) {
                     document.body.removeChild(posterContainer);
-                }
-                if (modal.parentNode) {
-                    document.body.removeChild(modal);
                 }
             });
         };

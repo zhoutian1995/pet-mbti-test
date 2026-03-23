@@ -8,9 +8,24 @@ const app = express();
 const PORT = 3001;
 
 // Middleware
-app.use(cors());
+// CORS 配置 - 限制允许的域名
+const corsOptions = {
+  origin: [
+    'http://localhost:3001',
+    'http://127.0.0.1:3001',
+    'https://willeai.cn',
+    'https://www.willeai.cn'
+  ],
+  methods: ['GET', 'POST'],
+  credentials: true
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
+
+// 有效的 MBTI 类型和物种
+const VALID_MBTI_TYPES = ['ENFP', 'ENFJ', 'ENTP', 'ENTJ', 'ESFP', 'ESFJ', 'ESTP', 'ESTJ', 'INFP', 'INFJ', 'INTP', 'INTJ', 'ISFP', 'ISFJ', 'ISTP', 'ISTJ'];
+const VALID_SPECIES = ['cat', 'dog'];
 
 // SQLite database
 const db = new sqlite3.Database('./data.db');
@@ -33,14 +48,28 @@ db.serialize(() => {
 // API: Submit test result
 app.post('/api/submit', (req, res) => {
   const { species, mbti_type } = req.body;
+
+  // 输入验证
+  if (!species || !mbti_type) {
+    return res.status(400).json({ error: 'Missing required fields: species and mbti_type' });
+  }
+
+  if (!VALID_SPECIES.includes(species)) {
+    return res.status(400).json({ error: `Invalid species. Must be one of: ${VALID_SPECIES.join(', ')}` });
+  }
+
+  if (!VALID_MBTI_TYPES.includes(mbti_type)) {
+    return res.status(400).json({ error: `Invalid MBTI type. Must be one of: ${VALID_MBTI_TYPES.join(', ')}` });
+  }
+
   const timestamp = new Date().toISOString();
   const session_id = uuidv4();
-  
+
   const stmt = db.prepare(`
     INSERT INTO test_results (timestamp, species, mbti_type, session_id, source)
     VALUES (?, ?, ?, ?, 'web')
   `);
-  
+
   stmt.run(timestamp, species, mbti_type, session_id, function(err) {
     if (err) {
       res.status(500).json({ error: err.message });
